@@ -88,8 +88,22 @@ function PostsDAO(db) {
         }
 
         // hw3.3 TODO
-	
-        callback(Error("addComment NYI"), null);
+	this.getPostByPermalink(permalink, function(err, retrivedPost){
+		if(err) return callback(err, null);
+
+		retrivedPost.comments.push(comment);
+
+		var query =  { 'permalink': permalink };
+
+		posts.update(query, retrivedPost, function(err, updated){
+			if(err) return callback(err, null);
+
+			console.dir("comment successfully inserted:" + JSON.stringify(updated));
+
+
+			callback(null, updated);
+		});
+	});
     }
 }
 
